@@ -51,14 +51,14 @@ jobs:
       - name: Checkout Infra Repository
         uses: actions/checkout@v3
         with:
-          repository: 사용자계정/인프라저장소명 # 👈 사용자님의 인프라 저장소
-          token: ${{ secrets.ARGOCD_GIT_TOKEN}}   # 인프라 저장소 푸시 권한이 있는 PAT
-          path: infra-repo 
+           repository: fraidy53/awseksinfra
+           token: ${{ secrets.ARGOCD_GIT_TOKEN}}   # 인프라 저장소 푸시 권한이 있는 PAT
+           path: infra-repo 
       - name: Update Manifest
         run: |
           cd infra-repo
           # manifests/backend/deployment.yaml 내의 image: 부분을 새 이미지 태그로 변경
-          sed -i "s|image:.*|image: ${{ steps.build-image.outputs.image }}|g" manifests/backend/deployment.yaml
+           sed -i "s|image:.*|image: ${{ env.ECR }}:${{ env.TAG }}|g" manifests/backend/deployment.yaml
       - name: Commit and Push Changes
         run: |
           cd infra-repo
