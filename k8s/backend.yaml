@@ -4,7 +4,7 @@ metadata:
   name: backend-sa
   namespace: sample-app
   annotations:
-    eks.amazonaws.com/role-arn: ${BACKEND_SA_ROLE_ARN}
+    eks.amazonaws.com/role-arn: "arn:aws:iam::805400277714:role/BackendServiceRole"
 ---
 apiVersion: v1
 kind: Secret
@@ -13,10 +13,10 @@ metadata:
   namespace: sample-app
 type: Opaque
 stringData:
-  S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
-  DB_USERNAME: "${DB_USERNAME}"
-  DB_PASSWORD: "${DB_PASSWORD}"
-  DB_URL: "${DB_URL}"
+  S3_BUCKET_NAME: "sample-app-dev-files-805400277714-kbm"
+  DB_USERNAME: "admin"
+  DB_PASSWORD: "admin123$"
+  DB_URL: "jdbc:mysql://sample-app-mysql.c18y4gs8uo61.ap-northeast-2.rds.amazonaws.com:3306/mydb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -41,7 +41,7 @@ spec:
       serviceAccountName: backend-sa
       containers:
         - name: backend
-          image: ${BACKEND_IMAGE}
+          image: 805400277714.dkr.ecr.ap-northeast-2.amazonaws.com/sample-app-v3/backend:latest
           ports:
             - containerPort: 8080
           env:
